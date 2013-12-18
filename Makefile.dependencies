@@ -1,0 +1,5 @@
+symtab.o: symtab.cc symtab.hh string.hh ast.hh codegen.hh
+string.o: string.cc string.hh
+ast.o: ast.cc ast.hh symtab.hh string.hh codegen.hh
+codegen.o: codegen.cc ast.hh symtab.hh string.hh codegen.hh
+main.o: main.cc ast.hh symtab.hh string.hh codegen.hh parser.hh
