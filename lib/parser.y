@@ -183,9 +183,20 @@ functions   :   functions function
  * them. Just calling GeneratCode in the function should do the trick.
  */
 
-function :
+function : FUNCTION id parameters ':' type DECLARE declarations block ';'
 	{
-	  std::cerr << "Function here" << std::endl;
+    if(currentFunction->OkToAddSymbol(*($2)))
+    {
+      FunctionInformation* newFunction = new FunctionInformation(*($2));
+      newFunction->SetParent(currentFunction);
+      newFunction->SetReturnType($5);
+
+      currentFunction->AddFunction(*($2), newFunction);
+    }
+    else
+    {
+      error() << "function " << *($2) << " already defined" << std::endl;
+    }
 	}
 	;
 
@@ -575,7 +586,8 @@ real        :   REAL
  * trees for expressions with compatible types!
  */
 
-expression :
+expression : id
+           | INTEGER
 	{
 	  std::cerr << "Expression here" << std::endl;
 	}

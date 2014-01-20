@@ -5,9 +5,8 @@ find_package(FLEX)
 find_package(BISON)
 
 set(CMAKE_CXX_FLAGS "-g -Wall -std=c++11 -stdlib=libc++")
-add_subdirectory(googletest)
 enable_testing()
-include_directories(${CMAKE_SOURCE_DIR}/include ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
 flex_target(scanner
   lib/scanner.l
@@ -31,4 +30,12 @@ add_executable(parser
   lib/symtab.cc
   lib/main.cc
 )
+
+add_test(
+  NAME empty_function
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/empty_function)
+
+set_tests_properties(
+  empty_function
+  PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 

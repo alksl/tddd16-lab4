@@ -1,0 +1,11 @@
+function empty ( i : integer ) : integer
+declare
+  tmp : integer;
+begin
+  return i;
+end;
+
+begin
+  empty(0);
+end;
+

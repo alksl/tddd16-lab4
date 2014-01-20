@@ -1,17 +1,27 @@
 %{
+
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #include <symtab.hh>
 #include <ast.hh>
 #include <parser.hh>
 
-/* --- Your code here ---
- *
- * This is where C declarations go. If you need to include
- * files for the actions below, this is where you do it.
- */
+std::vector<std::string> scanner_warnings;
 
-/* --- End your code --- */
+void warning(std::string msg) {
+  std::stringstream ss;
+  ss << "Warning (line ";
+  ss << yylineno;
+  ss << "): ";
+  ss << msg;
+  ss << std::endl;
+  scanner_warnings.push_back(msg);
+  std::cerr << ss.str();
+}
 
-extern void yyerror(char *);
 %}
 
 %option yylineno
@@ -20,16 +30,20 @@ extern void yyerror(char *);
 %option caseless
 %option nodefault
 
-/* --- Your code here ---
- *
- * This is where Flex declarations go. If you need to include
- * any such declarations, this is where you do it.
- */
+digit                             [0-9]
+integer                           {digit}+
+sign                              [+-]
+exponent                          [Ee]({sign})?{integer}
+real                              (\.{integer}|{integer}\.({integer})?)({exponent})?
+integer_with_exponent             {integer}{exponent}
+
+identifier                        [a-zA-Z][a-zA-Z0-9_]*
+
+cpp_comment                       \/\/.*\n
+
+whitespace                        [ \t\n]*
 
 %x comment
-
-/* --- End your code --- */
-
 %%
 
 if                                  return IF;
@@ -55,9 +69,25 @@ not                                 return NOT;
 array                               return ARRAY;
 of                                  return OF;
 
+{identifier}                        return ID;
+
+{real}                              return REAL;
+{integer_with_exponent}             return REAL;
+{integer}                           return INTEGER;
+
+{cpp_comment}                       { }
+
+"/*"                                BEGIN(comment);
+<comment>"/*"                       { warning("Starting comment inside another comment!!!"); }
+<comment>"/"                        { }
+<comment>[^/*\n]*                   { }
+<comment>"*"+[^*/\n]*               { }
+<comment>\n                         { }
+<comment>"*/"                       BEGIN(INITIAL);
 
 
-<<EOF>>                             yyterminate();
+{whitespace}                        { }
+
 .                                   return yytext[0];
-
+<<EOF>>                             yyterminate();
 %%
