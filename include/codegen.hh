@@ -23,15 +23,15 @@ typedef enum
 
     // Arithmetic operations
 
-    iadd,       // Add integers a, b giving int r  : iadd <a> <b> <r>   
-    isub,       // Subtract b from a giving int r  : isub <a> <b> <r>   
-    imul,       // Multiply a by b giving int r    : imul <a> <b> <r>   
-    idiv,       // Divide a by b and truncate reslt: idiv <a> <b> <r>   
+    iadd,       // Add integers a, b giving int r  : iadd <a> <b> <r>
+    isub,       // Subtract b from a giving int r  : isub <a> <b> <r>
+    imul,       // Multiply a by b giving int r    : imul <a> <b> <r>
+    idiv,       // Divide a by b and truncate reslt: idiv <a> <b> <r>
     ipow,       // Raise x to the power of y (ints): ipow <x> <y> <r>
-    radd,       // Add reals a, b giving real r    : radd <a> <b> <r>   
-    rsub,       // Subtract b from a giving real r : rsub <a> <b> <r>   
-    rmul,       // Multiply a by b giving real r   : rmul <a> <b> <r>   
-    rdiv,       // Divide a by b giving real r     : rdiv <a> <b> <r>   
+    radd,       // Add reals a, b giving real r    : radd <a> <b> <r>
+    rsub,       // Subtract b from a giving real r : rsub <a> <b> <r>
+    rmul,       // Multiply a by b giving real r   : rmul <a> <b> <r>
+    rdiv,       // Divide a by b giving real r     : rdiv <a> <b> <r>
     rpow,       // Raise x to y (reals)            : rpow <x> <y> <r>
 
     // Comparisons
@@ -55,7 +55,7 @@ typedef enum
     jfalse,     // Jump to label l if r is zero    : jfalse <l> <r> -
     jump,       // Jump to label l                 : jump   <l>  -  -
     clabel,     // Label l                         : clabel <l>  -  -
-    
+
     // Memory operations
 
     istore,     // Store r to memory location a    : istore <r> - <a>
@@ -79,14 +79,14 @@ typedef enum
 
     hcf,        // Crash. If this is generated, you've got a bug.
     nop         // Do nothing                      : nop - - -
-    
+
 } tQuadType;
 
 
 class Quad
 {
 private:
-    ostream& print(ostream&);
+    std::ostream& print(std::ostream&);
 
 public:
     tQuadType        opcode;
@@ -127,7 +127,7 @@ public:
         sym3(c),
         int2(b)
         {};
-        
+
 
     Quad(tQuadType o,
          double a, SymbolInformation *b, SymbolInformation *c) :
@@ -136,9 +136,9 @@ public:
         sym3(c),
         real1(a)
         {};
-         
-    friend ostream& operator<<(ostream&, Quad*);
-    friend ostream& operator<<(ostream&, Quad&);
+
+    friend std::ostream& operator<<(std::ostream&, Quad*);
+    friend std::ostream& operator<<(std::ostream&, Quad&);
 };
 
 
@@ -161,8 +161,8 @@ class QuadsList
     QuadsListElement        *head, *tail;
     static long              labelCounter;
 
-    ostream& print(ostream&);
-    
+    std::ostream& print(std::ostream&);
+
 public:
     QuadsList() :
         head(NULL),
@@ -172,8 +172,8 @@ public:
     long       NextLabel(void) { return (labelCounter += 1); };
 
     friend class QuadsListIterator;
-    friend ostream& operator<<(ostream&, QuadsList*);
-    friend ostream& operator<<(ostream&, QuadsList&);
+    friend std::ostream& operator<<(std::ostream&, QuadsList*);
+    friend std::ostream& operator<<(std::ostream&, QuadsList&);
 };
 
 class QuadsListIterator

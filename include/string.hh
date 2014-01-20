@@ -1,7 +1,7 @@
 #ifndef KOMP_STRING_H
 #define KOMP_STRING_H
 
-#include <iostream.h>
+#include <iostream>
 
 
 //
@@ -19,7 +19,7 @@
 // really necessary. If strings were considered read only (no
 // destructive update), then it would be possible to keep a pool of
 // strings with reference counts and just pass along references to
-// that pool. 
+// that pool.
 //
 
 class string
@@ -49,7 +49,7 @@ public:
     string& operator=(const string&); // Assignment operator
     string& operator=(const char *);  // Assignment operator
     string& operator=(const char);    // Assignment operator
-    
+
     string& operator+=(const string&); // Append operator
     string& operator+=(const char);    // Append operator
     string& operator+=(const char *);  // Append operator
@@ -73,8 +73,8 @@ public:
     // I/O
     //
 
-    friend ostream& operator<<(ostream&, const string&);
-    friend ostream& operator<<(ostream&, const string*);
+    friend std::ostream& operator<<(std::ostream&, const string&);
+    friend std::ostream& operator<<(std::ostream&, const string*);
 
     //
     // Miscellaneous operators and methods

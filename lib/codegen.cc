@@ -1,9 +1,9 @@
-#include <iostream.h>
-#include <iomanip.h>
+#include <iostream>
+#include <iomanip>
 
-#include "ast.hh"
-#include "symtab.hh"
-#include "codegen.hh"
+#include <ast.hh>
+#include <symtab.hh>
+#include <codegen.hh>
 
 
 long QuadsList::labelCounter;
@@ -18,10 +18,10 @@ long QuadsList::labelCounter;
  * parse tree, but ensure that all exits from the code end up at a
  * particular label. This is easy to do for most parts of the parse
  * tree: just generate the code in the usual manner, then jump to the
- * label. 
+ * label.
  */
 
- 
+
 VariableInformation *ASTNode::GenerateCodeAndJump(QuadsList& q,
                                                   long label)
 {
@@ -86,19 +86,19 @@ void Identifier::GenerateAssignment(QuadsList& q, VariableInformation *val)
 {
     if (val->type == NULL || id->type == NULL)
     {
-        cerr << "Bug: you created an untyped variable.\n";
+        std::cerr << "Bug: you created an untyped variable.\n";
         abort();
     }
     if (id->type == kIntegerType)
     {
-        q += new Quad(iassign, 
-		      dynamic_cast<SymbolInformation*>(val), 
+        q += new Quad(iassign,
+		      dynamic_cast<SymbolInformation*>(val),
 		      static_cast<SymbolInformation*>(NULL),
 		      dynamic_cast<SymbolInformation*>(id));
     }
     else if (id->type == kRealType)
     {
-        q += new Quad(rassign, 
+        q += new Quad(rassign,
 		      dynamic_cast<SymbolInformation*>(val),
 		      static_cast<SymbolInformation*>(NULL),
 		      dynamic_cast<SymbolInformation*>(id));
@@ -115,7 +115,7 @@ void Identifier::GenerateAssignment(QuadsList& q, VariableInformation *val)
  *
  * Generate code for a list of statements. Make sure the code comes
  * out in the right order.
- * 
+ *
  * Note: The impelementation here is absolutely ridiculous since it
  * uses stack space proportional to the number of statements in the
  * list. A more sensible definition would simply iterate down the
@@ -137,9 +137,9 @@ VariableInformation *StatementList::GenerateCode(QuadsList &q)
 /*
  * IfStatement::GenerateCode
  *
- * If statements, particularly those with elseif branches are actually 
+ * If statements, particularly those with elseif branches are actually
  * quite involved. They tend to use a lot of jumps. For the elseif
- * branches you'll probably want to use the GenerateCodeAndJump method 
+ * branches you'll probably want to use the GenerateCodeAndJump method
  * of ElseIfStatement (which you're also supposed to write.)
  */
 
@@ -147,9 +147,9 @@ VariableInformation *IfStatement::GenerateCode(QuadsList& q)
 {
     /* --- Your code here ---*/
 
-    
+
     /* --- End your code --- */
-    
+
     return NULL;
 }
 
@@ -171,7 +171,7 @@ VariableInformation *ElseIfList::GenerateCode(QuadsList& q)
 
     /* --- End your code --- */
 
-    cerr << "Call to ElseIfList::GenerateCode. You probably didn't want to do this.\n"; // 
+    std::cerr << "Call to ElseIfList::GenerateCode. You probably didn't want to do this.\n"; //
     abort();
 }
 
@@ -259,7 +259,7 @@ VariableInformation *ArrayReference::GenerateCode(QuadsList& q)
 /*
  * Identifier::GenerateCode
  *
- * Generate code to get the value of an identifier. Actually, we don't 
+ * Generate code to get the value of an identifier. Actually, we don't
  * need to generate any code at all. We just return the identifier.
  */
 
@@ -284,18 +284,18 @@ VariableInformation *ReturnStatement::GenerateCode(QuadsList &q)
     info = value->GenerateCode(q);
     if (info->type != currentFunction->GetReturnType())
     {
-        cerr << "Bug: you forgot to typecheck return statements.\n";
+        std::cerr << "Bug: you forgot to typecheck return statements.\n";
         abort();
     }
 
-    q += new Quad(creturn, 
+    q += new Quad(creturn,
 		  static_cast<SymbolInformation*>(NULL),
 		  static_cast<SymbolInformation*>(NULL),
 		  dynamic_cast<SymbolInformation*>(info));
 
     return NULL;
 }
- 
+
 
 /*
  * ExpressionList::GenerateCode
@@ -310,7 +310,7 @@ VariableInformation *ExpressionList::GenerateCode(QuadsList& q)
 {
     USEQ;
 
-    cerr << "Bug: can't generate code for an ExpressionList.\n";
+    std::cerr << "Bug: can't generate code for an ExpressionList.\n";
     abort();
 }
 
@@ -322,7 +322,7 @@ void ExpressionList::GenerateParameterList(QuadsList &q,
     if (lastParam == NULL ||
         (lastParam->prev != NULL && precedingExpressions == NULL))
     {
-        cerr << "Bug: type checking of function params isn't good enough.\n";
+        std::cerr << "Bug: type checking of function params isn't good enough.\n";
         abort();
     }
 
@@ -334,18 +334,18 @@ void ExpressionList::GenerateParameterList(QuadsList &q,
 
     if (expression->valueType == lastParam->type)
     {
-        q += new Quad(param, 
+        q += new Quad(param,
 		      dynamic_cast<SymbolInformation*>(info),
 		      static_cast<SymbolInformation*>(NULL),
 		      static_cast<SymbolInformation*>(NULL));
     }
     else
     {
-        cerr << "Bug: type checking of function params isn't good enough.\n";
+        std::cerr << "Bug: type checking of function params isn't good enough.\n";
         abort();
     }
 }
-                                                  
+
 
 
 
@@ -386,12 +386,12 @@ VariableInformation *IntegerToReal::GenerateCode(QuadsList& q)
 
     if (value->valueType != kIntegerType)
     {
-        cerr << "Bug: you're trying to convert a non-integer to a real.\n";
+        std::cerr << "Bug: you're trying to convert a non-integer to a real.\n";
     }
 
     info = currentFunction->TemporaryVariable(kRealType);
     valueInfo = value->GenerateCode(q);
-    q += new Quad(itor, 
+    q += new Quad(itor,
 		  dynamic_cast<SymbolInformation*>(valueInfo),
 		  static_cast<SymbolInformation*>(NULL),
 		  dynamic_cast<SymbolInformation*>(info));
@@ -405,12 +405,12 @@ VariableInformation *TruncateReal::GenerateCode(QuadsList& q)
 
     if (value->valueType != kRealType)
     {
-        cerr << "Bug: you're trying to truncate a non-real.\n";
+        std::cerr << "Bug: you're trying to truncate a non-real.\n";
     }
 
     info = currentFunction->TemporaryVariable(kIntegerType);
     valueInfo = value->GenerateCode(q);
-    q += new Quad(rtrunc, 
+    q += new Quad(rtrunc,
 		  dynamic_cast<SymbolInformation*>(valueInfo),
 		  static_cast<SymbolInformation*>(NULL),
 		  dynamic_cast<SymbolInformation*>(info));
@@ -460,7 +460,7 @@ static VariableInformation *BinaryGenerateCode(QuadsList& q,
     VariableInformation *leftInfo, *rightInfo, *result;
 
     /* --- Your code here --- */
-     
+
     /* --- End your code --- */
 }
 
@@ -516,7 +516,7 @@ VariableInformation *UnaryMinus::GenerateCode(QuadsList& q)
 
     if (info->type == kIntegerType)
     {
-        q += new Quad(iconst, 0L, NULL, constInfo);
+        q += new Quad(iconst, 0L, (SymbolInformation*)NULL, constInfo);
         q += new Quad(isub, constInfo, info, result);
     }
     else if (info->type == kRealType)
@@ -526,7 +526,7 @@ VariableInformation *UnaryMinus::GenerateCode(QuadsList& q)
     }
     else
     {
-        cerr << "Bug: unary minus of a non-numeric type.\n";
+        std::cerr << "Bug: unary minus of a non-numeric type.\n";
         abort();
     }
 
@@ -628,12 +628,12 @@ VariableInformation *Not::GenerateCode(QuadsList& q)
     info = right->GenerateCode(q);
     if (info->type != kIntegerType)
     {
-        cerr << "Bug: not operator applied to a non-integer.\n";
+        std::cerr << "Bug: not operator applied to a non-integer.\n";
         abort();
     }
 
     result = currentFunction->TemporaryVariable(kIntegerType);
-    q += new Quad(inot, 
+    q += new Quad(inot,
 		  dynamic_cast<SymbolInformation*>(info),
 		  static_cast<SymbolInformation*>(NULL),
 		  dynamic_cast<SymbolInformation*>(result));
@@ -661,7 +661,7 @@ VariableInformation *FunctionCall::GenerateCode(QuadsList& q)
     if (arguments)
         arguments->GenerateParameterList(q, function->GetLastParam());
     info = currentFunction->TemporaryVariable(function->GetReturnType());
-    q += new Quad(call, 
+    q += new Quad(call,
 		  dynamic_cast<SymbolInformation*>(function),
 		  static_cast<SymbolInformation*>(NULL),
 		  dynamic_cast<SymbolInformation*>(info));
@@ -690,7 +690,7 @@ QuadsList& QuadsList::operator+=(Quad *q)
     return *this;
 }
 
-ostream& QuadsList::print(ostream& o)
+std::ostream& QuadsList::print(std::ostream& o)
 {
     QuadsListElement        *elem;
 
@@ -708,250 +708,250 @@ ostream& QuadsList::print(ostream& o)
     return o;
 }
 
-ostream& Quad::print(ostream& o)
+std::ostream& Quad::print(std::ostream& o)
 {
     o << "    ";
     switch(opcode)
     {
     case iconst:
-        o << setw(8) << "iconst  "
-          << setw(8) << int1 
-          << setw(8) <<"-" 
-          << setw(8) <<sym3;
+        o << std::setw(8) << "iconst  "
+          << std::setw(8) << int1
+          << std::setw(8) <<"-"
+          << std::setw(8) <<sym3;
         break;
     case rconst:
-        o << setw(8) <<"rconst  "
-          << setw(8) <<real1
-          << setw(8) <<"-" 
-          << setw(8) <<sym3;
+        o << std::setw(8) <<"rconst  "
+          << std::setw(8) <<real1
+          << std::setw(8) <<"-"
+          << std::setw(8) <<sym3;
         break;
     case iaddr:
-        o << setw(8) <<"iaddr   "
-          << setw(8) <<sym1 
-          << setw(8) <<"-" 
-          << setw(8) <<sym3;
+        o << std::setw(8) <<"iaddr   "
+          << std::setw(8) <<sym1
+          << std::setw(8) <<"-"
+          << std::setw(8) <<sym3;
         break;
-    case itor:      
-        o << setw(8) <<"itor    "
-          << setw(8) <<sym1 
-          << setw(8) <<"-" 
-          << setw(8) <<sym3;
+    case itor:
+        o << std::setw(8) <<"itor    "
+          << std::setw(8) <<sym1
+          << std::setw(8) <<"-"
+          << std::setw(8) <<sym3;
         break;
-    case rtrunc:    
-        o << setw(8) <<"rtrunc  "
-          << setw(8) <<sym1 
-          << setw(8) <<"-" 
-          << setw(8) <<sym3;
+    case rtrunc:
+        o << std::setw(8) <<"rtrunc  "
+          << std::setw(8) <<sym1
+          << std::setw(8) <<"-"
+          << std::setw(8) <<sym3;
         break;
-    case iadd:      
-        o << setw(8) << "iadd    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case iadd:
+        o << std::setw(8) << "iadd    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case isub:      
-        o << setw(8) << "isub    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case isub:
+        o << std::setw(8) << "isub    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case imul:      
-        o << setw(8) << "imul    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case imul:
+        o << std::setw(8) << "imul    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case idiv:      
-        o << setw(8) << "idiv    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case idiv:
+        o << std::setw(8) << "idiv    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case ipow:      
-        o << setw(8) << "ipow    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case ipow:
+        o << std::setw(8) << "ipow    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case radd:      
-        o << setw(8) << "radd    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case radd:
+        o << std::setw(8) << "radd    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case rsub:      
-        o << setw(8) << "rsub    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case rsub:
+        o << std::setw(8) << "rsub    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case rmul:      
-        o << setw(8) << "rmul    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case rmul:
+        o << std::setw(8) << "rmul    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case rdiv:      
-        o << setw(8) << "rdiv    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case rdiv:
+        o << std::setw(8) << "rdiv    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case rpow:      
-        o << setw(8) << "rpow    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case rpow:
+        o << std::setw(8) << "rpow    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case igt:       
-        o << setw(8) << "igt     "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case igt:
+        o << std::setw(8) << "igt     "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case ilt:       
-        o << setw(8) << "ilt     "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case ilt:
+        o << std::setw(8) << "ilt     "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case ieq:       
-        o << setw(8) << "ieq     "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case ieq:
+        o << std::setw(8) << "ieq     "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case rgt:       
-        o << setw(8) << "rgt     "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case rgt:
+        o << std::setw(8) << "rgt     "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case rlt:       
-        o << setw(8) << "rlt     "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case rlt:
+        o << std::setw(8) << "rlt     "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case req:       
-        o << setw(8) << "req     "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case req:
+        o << std::setw(8) << "req     "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case iand:      
-        o << setw(8) << "iand    "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case iand:
+        o << std::setw(8) << "iand    "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case ior:       
-        o << setw(8) << "ior     "
-          << setw(8) << sym1 
-          << setw(8) << sym2 
-          << setw(8) << sym3;
+    case ior:
+        o << std::setw(8) << "ior     "
+          << std::setw(8) << sym1
+          << std::setw(8) << sym2
+          << std::setw(8) << sym3;
         break;
-    case inot:      
-        o << setw(8) << "inot    "
-          << setw(8) << sym1 
-          << setw(8) << "-" 
-          << setw(8) << sym3;
+    case inot:
+        o << std::setw(8) << "inot    "
+          << std::setw(8) << sym1
+          << std::setw(8) << "-"
+          << std::setw(8) << sym3;
         break;
-    case jtrue:     
-        o << setw(8) << "jtrue   "
-          << setw(8) << int1 
-          << setw(8) << sym2 
-          << setw(8) << "-";
+    case jtrue:
+        o << std::setw(8) << "jtrue   "
+          << std::setw(8) << int1
+          << std::setw(8) << sym2
+          << std::setw(8) << "-";
         break;
-    case jfalse:    
-        o << setw(8) << "jfalse  "
-          << setw(8) << int1 
-          << setw(8) << sym2 
-          << setw(8) << "-";
+    case jfalse:
+        o << std::setw(8) << "jfalse  "
+          << std::setw(8) << int1
+          << std::setw(8) << sym2
+          << std::setw(8) << "-";
         break;
-    case jump:      
-        o << setw(8) << "jump    "
-          << setw(8) << int1 
-          << setw(8) << "-" 
-          << setw(8) << "-";
+    case jump:
+        o << std::setw(8) << "jump    "
+          << std::setw(8) << int1
+          << std::setw(8) << "-"
+          << std::setw(8) << "-";
         break;
-    case clabel:    
-        o << setw(8) << "clabel  "
-          << setw(8) << int1 
-          << setw(8) << "-" 
-          << setw(8) << "-";
+    case clabel:
+        o << std::setw(8) << "clabel  "
+          << std::setw(8) << int1
+          << std::setw(8) << "-"
+          << std::setw(8) << "-";
         break;
-    case istore:    
-        o << setw(8) << "istore  "
-          << setw(8) << sym1 
-          << setw(8) << "-" 
-          << setw(8) << sym3;
+    case istore:
+        o << std::setw(8) << "istore  "
+          << std::setw(8) << sym1
+          << std::setw(8) << "-"
+          << std::setw(8) << sym3;
         break;
-    case iload:     
-        o << setw(8) << "iload   "
-          << setw(8) << sym1 
-          << setw(8) << "-" 
-          << setw(8) << sym3;
+    case iload:
+        o << std::setw(8) << "iload   "
+          << std::setw(8) << sym1
+          << std::setw(8) << "-"
+          << std::setw(8) << sym3;
         break;
-    case rstore:    
-        o << setw(8) << "rstore  "
-          << setw(8) << sym1 
-          << setw(8) << "-" 
-          << setw(8) << sym3;
+    case rstore:
+        o << std::setw(8) << "rstore  "
+          << std::setw(8) << sym1
+          << std::setw(8) << "-"
+          << std::setw(8) << sym3;
         break;
-    case rload:     
-        o << setw(8) << "rload   "
-          << setw(8) << sym1 
-          << setw(8) << "-" 
-          << setw(8) << sym3;
+    case rload:
+        o << std::setw(8) << "rload   "
+          << std::setw(8) << sym1
+          << std::setw(8) << "-"
+          << std::setw(8) << sym3;
         break;
-    case creturn:   
-        o << setw(8) << "creturn "
-          << setw(8) << "-" 
-          << setw(8) << "-" 
-          << setw(8) << sym3;
+    case creturn:
+        o << std::setw(8) << "creturn "
+          << std::setw(8) << "-"
+          << std::setw(8) << "-"
+          << std::setw(8) << sym3;
         break;
-    case param:    
-        o << setw(8) << "param   "
-          << setw(8) << sym1 
-          << setw(8) << "-" 
-          << setw(8) << "-";
+    case param:
+        o << std::setw(8) << "param   "
+          << std::setw(8) << sym1
+          << std::setw(8) << "-"
+          << std::setw(8) << "-";
         break;
-    case call:      
-        o << setw(8) << "call    "
-          << setw(8) << sym1 
-          << setw(8) << "-" 
-          << setw(8) << sym3;
+    case call:
+        o << std::setw(8) << "call    "
+          << std::setw(8) << sym1
+          << std::setw(8) << "-"
+          << std::setw(8) << sym3;
         break;
-    case iassign:   
-        o << setw(8) << "iassign "
-          << setw(8) << sym1 
-          << setw(8) << "-" 
-          << setw(8) << sym3;
+    case iassign:
+        o << std::setw(8) << "iassign "
+          << std::setw(8) << sym1
+          << std::setw(8) << "-"
+          << std::setw(8) << sym3;
         break;
-    case rassign:   
-        o << setw(8) << "rassign "
-          << setw(8) << sym1 
-          << setw(8) << "-" 
-          << setw(8) << sym3;
+    case rassign:
+        o << std::setw(8) << "rassign "
+          << std::setw(8) << sym1
+          << std::setw(8) << "-"
+          << std::setw(8) << sym3;
         break;
-    case aassign:   
-        o << setw(8) << "aassign "
-          << setw(8) << sym1 
-          << setw(8) << int1 
-          << setw(8) << sym3;
+    case aassign:
+        o << std::setw(8) << "aassign "
+          << std::setw(8) << sym1
+          << std::setw(8) << int1
+          << std::setw(8) << sym3;
         break;
-    case hcf:       
-        o << setw(8) << "hcf     "
-          << setw(8) << "-" 
-          << setw(8) << "-" 
-          << setw(8) << "-";
+    case hcf:
+        o << std::setw(8) << "hcf     "
+          << std::setw(8) << "-"
+          << std::setw(8) << "-"
+          << std::setw(8) << "-";
         break;
-    case nop:       
-        o << setw(8) << "nop     "
-          << setw(8) << "-" 
-          << setw(8) << "-"  
-          << setw(8) << "-";
+    case nop:
+        o << std::setw(8) << "nop     "
+          << std::setw(8) << "-"
+          << std::setw(8) << "-"
+          << std::setw(8) << "-";
         break;
     default:
         o << "unknown (" << opcode << ")";
@@ -962,7 +962,7 @@ ostream& Quad::print(ostream& o)
 }
 
 
-ostream& operator<<(ostream& o, QuadsList *q)
+std::ostream& operator<<(std::ostream& o, QuadsList *q)
 {
     if (q != NULL)
         return q->print(o);
@@ -970,12 +970,12 @@ ostream& operator<<(ostream& o, QuadsList *q)
         return o << "    QuadsList @ 0x0\n";
 }
 
-ostream& operator<<(ostream& o, QuadsList& q)
+std::ostream& operator<<(std::ostream& o, QuadsList& q)
 {
     return q.print(o);
 }
 
-ostream& operator<<(ostream& o, Quad *q)
+std::ostream& operator<<(std::ostream& o, Quad *q)
 {
     if (q != NULL)
         return q->print(o);
@@ -983,7 +983,7 @@ ostream& operator<<(ostream& o, Quad *q)
         return o << "    Quad @ 0x0";
 }
 
-ostream& operator<<(ostream& o, Quad& q)
+std::ostream& operator<<(std::ostream& o, Quad& q)
 {
     return q.print(o);
 }

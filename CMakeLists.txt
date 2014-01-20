@@ -21,7 +21,7 @@ bison_target(parser
 
 add_flex_bison_dependency(scanner parser)
 
-add_executable(scanner
+add_executable(parser
   ${FLEX_scanner_OUTPUTS}
   ${BISON_parser_OUTPUTS}
   lib/ast.cc

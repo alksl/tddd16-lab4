@@ -1,11 +1,11 @@
-#include "ast.hh"
+#include <ast.hh>
 
 
 int  ASTNode::indentLevel = 0;
 bool ASTNode::branches[10000];
 
 
-void ASTNode::beginChild(ostream& o)
+void ASTNode::beginChild(std::ostream& o)
 {
     //    indent(o);
     //    o << "|\n";
@@ -15,7 +15,7 @@ void ASTNode::beginChild(ostream& o)
     indentMore();
 }
 
-void ASTNode::endChild(ostream& o)
+void ASTNode::endChild(std::ostream& o)
 {
     o << "";                    // Suppress warning
     indentLess();
@@ -30,7 +30,7 @@ void ASTNode::endChild(ostream& o)
     }
 }
 
-void ASTNode::lastChild(ostream& o)
+void ASTNode::lastChild(std::ostream& o)
 {
     //    indent(o);
     //    o << "|\n";
@@ -40,17 +40,17 @@ void ASTNode::lastChild(ostream& o)
     indentMore();
 }
 
-void ASTNode::print(ostream& o)
+void ASTNode::print(std::ostream& o)
 {
     o << "ASTNode";
 }
 
-void ASTNode::xprint(ostream& o, char *cls)
+void ASTNode::xprint(std::ostream& o, char *cls)
 {
     o << "ASTNode (" << cls << ")";
 }
 
-void ASTNode::indent(ostream& o)
+void ASTNode::indent(std::ostream& o)
 {
     int i;
 
@@ -73,7 +73,7 @@ void ASTNode::indentLess(void)
     indentLevel -= 2;
 }
 
-void StatementList::print(ostream& o)
+void StatementList::print(std::ostream& o)
 {
     o << "StatementList (statement, preceding)\n";
     beginChild(o);
@@ -84,12 +84,12 @@ void StatementList::print(ostream& o)
     endChild(o);
 }
 
-void Statement::print(ostream& o)
+void Statement::print(std::ostream& o)
 {
     o << "Statement";
 }
 
-void ElseIfList::print(ostream& o)
+void ElseIfList::print(std::ostream& o)
 {
     o << "ElseIfList (preceding, condition, body)\n";
     beginChild(o);
@@ -103,7 +103,7 @@ void ElseIfList::print(ostream& o)
     endChild(o);
 }
 
-void IfStatement::print(ostream& o)
+void IfStatement::print(std::ostream& o)
 {
     o << "IfStatement (condition, then, elseif, else)\n";
     beginChild(o);
@@ -120,7 +120,7 @@ void IfStatement::print(ostream& o)
     endChild(o);
 }
 
-void Assignment::print(ostream& o)
+void Assignment::print(std::ostream& o)
 {
     o << "Assignment (left, right)\n";
     beginChild(o);
@@ -131,7 +131,7 @@ void Assignment::print(ostream& o)
     endChild(o);
 }
 
-void CallStatement::print(ostream& o)
+void CallStatement::print(std::ostream& o)
 {
     o << "CallStatement (call)\n";
     lastChild(o);
@@ -139,7 +139,7 @@ void CallStatement::print(ostream& o)
     endChild(o);
 }
 
-void ReturnStatement::print(ostream& o)
+void ReturnStatement::print(std::ostream& o)
 {
     o << "ReturnStatement (value)\n";
     lastChild(o);
@@ -147,7 +147,7 @@ void ReturnStatement::print(ostream& o)
     endChild(o);
 }
 
-void WhileStatement::print(ostream& o)
+void WhileStatement::print(std::ostream& o)
 {
     o << "WhileStatement (condition, body)\n";
     beginChild(o);
@@ -158,14 +158,14 @@ void WhileStatement::print(ostream& o)
     endChild(o);
 }
 
-void Expression::print(ostream& o)
+void Expression::print(std::ostream& o)
 {
     o << "Expression ["
       << ShortSymbols << valueType << LongSymbols
       << "]\n";
 }
 
-void ExpressionList::print(ostream& o)
+void ExpressionList::print(std::ostream& o)
 {
     o << "ExpressionList (expression, preceding)\n";
     beginChild(o);
@@ -176,7 +176,7 @@ void ExpressionList::print(ostream& o)
     endChild(o);
 }
 
-void FunctionCall::print(ostream& o)
+void FunctionCall::print(std::ostream& o)
 {
     o << "FunctionCall (function, arguments) ["
       << ShortSymbols << valueType << LongSymbols
@@ -189,7 +189,7 @@ void FunctionCall::print(ostream& o)
     endChild(o);
 }
 
-void IntegerToReal::print(ostream& o)
+void IntegerToReal::print(std::ostream& o)
 {
     o << "IntegerToReal (value) ["
       << ShortSymbols << valueType << LongSymbols
@@ -199,7 +199,7 @@ void IntegerToReal::print(ostream& o)
     endChild(o);
 }
 
-void TruncateReal::print(ostream& o)
+void TruncateReal::print(std::ostream& o)
 {
     o << "TruncateReal (value) ["
       << ShortSymbols << valueType
@@ -209,26 +209,26 @@ void TruncateReal::print(ostream& o)
     endChild(o);
 }
 
-void IntegerConstant::print(ostream& o)
+void IntegerConstant::print(std::ostream& o)
 {
     o << "IntegerConstant (" << value << ") ["
       << ShortSymbols << valueType << LongSymbols
       << "]";
 }
 
-void RealConstant::print(ostream& o)
+void RealConstant::print(std::ostream& o)
 {
     o << "RealConstant (" << value << ") ["
       << ShortSymbols << valueType << LongSymbols
       << "]";
 }
 
-void BinaryOperation::print(ostream& o)
+void BinaryOperation::print(std::ostream& o)
 {
     xprint(o, "BinaryOperation");
 }
 
-void BinaryOperation::xprint(ostream& o, char *cls)
+void BinaryOperation::xprint(std::ostream& o, char *cls)
 {
     o << cls << " (left, right) ["
       << ShortSymbols << valueType << LongSymbols
@@ -241,13 +241,13 @@ void BinaryOperation::xprint(ostream& o, char *cls)
     endChild(o);
 }
 
-void Plus::print(ostream& o) { xprint(o, "Plus"); } // 
-void Minus::print(ostream& o) { xprint(o, "Minus"); }
-void Times::print(ostream& o) { xprint(o, "Times"); }
-void Divide::print(ostream& o) {xprint(o, "Divide"); }
-void Power::print(ostream& o) { xprint(o, "Power"); }
+void Plus::print(std::ostream& o) { xprint(o, "Plus"); } //
+void Minus::print(std::ostream& o) { xprint(o, "Minus"); }
+void Times::print(std::ostream& o) { xprint(o, "Times"); }
+void Divide::print(std::ostream& o) {xprint(o, "Divide"); }
+void Power::print(std::ostream& o) { xprint(o, "Power"); }
 
-void UnaryMinus::print(ostream& o)
+void UnaryMinus::print(std::ostream& o)
 {
     o << "UnaryMinus (right) ["
       << ShortSymbols << valueType << LongSymbols
@@ -257,12 +257,12 @@ void UnaryMinus::print(ostream& o)
     endChild(o);
 }
 
-void LeftValue::print(ostream& o)
+void LeftValue::print(std::ostream& o)
 {
     o << "LeftValue";
 }
 
-void ArrayReference::print(ostream& o)
+void ArrayReference::print(std::ostream& o)
 {
     o << "ArrayReference (id, index)\n";
     beginChild(o);
@@ -273,7 +273,7 @@ void ArrayReference::print(ostream& o)
     endChild(o);
 }
 
-void Identifier::print(ostream& o)
+void Identifier::print(std::ostream& o)
 {
     o << "Identifier (";
     if (id)
@@ -283,17 +283,17 @@ void Identifier::print(ostream& o)
     o << ")";
 }
 
-void Condition::print(ostream& o)
+void Condition::print(std::ostream& o)
 {
     o << "Condition";
 }
 
-void BinaryRelation::print(ostream& o)
+void BinaryRelation::print(std::ostream& o)
 {
     xprint(o, "BinaryRelation");
 }
 
-void BinaryRelation::xprint(ostream& o, char *cls)
+void BinaryRelation::xprint(std::ostream& o, char *cls)
 {
     o << cls << " (left, right)\n";
     beginChild(o);
@@ -304,19 +304,19 @@ void BinaryRelation::xprint(ostream& o, char *cls)
     endChild(o);
 }
 
-void LessThan::print(ostream& o) { xprint(o, "LessThan"); }
-void GreaterThan::print(ostream& o) { xprint(o, "GreaterThan"); }
-void LessThanOrEqual::print(ostream& o) { xprint(o, "LessThanOrEqual"); }
-void GreaterThanOrEqual::print(ostream& o) { xprint(o, "GreaterThanOrEqual"); }
-void Equal::print(ostream& o) { xprint(o, "Equal"); }
-void NotEqual::print(ostream& o) { xprint(o, "NotEqual"); }
+void LessThan::print(std::ostream& o) { xprint(o, "LessThan"); }
+void GreaterThan::print(std::ostream& o) { xprint(o, "GreaterThan"); }
+void LessThanOrEqual::print(std::ostream& o) { xprint(o, "LessThanOrEqual"); }
+void GreaterThanOrEqual::print(std::ostream& o) { xprint(o, "GreaterThanOrEqual"); }
+void Equal::print(std::ostream& o) { xprint(o, "Equal"); }
+void NotEqual::print(std::ostream& o) { xprint(o, "NotEqual"); }
 
-void BinaryCondition::print(ostream& o)
+void BinaryCondition::print(std::ostream& o)
 {
     xprint(o, "BinaryCondition");
 }
 
-void BinaryCondition::xprint(ostream& o, char *cls)
+void BinaryCondition::xprint(std::ostream& o, char *cls)
 {
     o << cls << " (left, right)\n";
     beginChild(o);
@@ -327,10 +327,10 @@ void BinaryCondition::xprint(ostream& o, char *cls)
     endChild(o);
 }
 
-void And::print(ostream& o) { xprint(o, "And"); }
-void Or::print(ostream& o) { xprint(o, "Or"); } // 
+void And::print(std::ostream& o) { xprint(o, "And"); }
+void Or::print(std::ostream& o) { xprint(o, "Or"); } //
 
-void Not::print(ostream& o)
+void Not::print(std::ostream& o)
 {
     o << "Not (right)\n";
     lastChild(o);
@@ -338,14 +338,14 @@ void Not::print(ostream& o)
     endChild(o);
 }
 
-void BooleanConstant::print(ostream& o)
+void BooleanConstant::print(std::ostream& o)
 {
     o << "BooleanConstant (" << (value?"TRUE":"FALSE") << ")";
 }
 
 
 
-ostream& operator<<(ostream& o, ASTNode *node)
+std::ostream& operator<<(std::ostream& o, ASTNode *node)
 {
     if (node == NULL)
         o << (void*)node;
@@ -354,7 +354,7 @@ ostream& operator<<(ostream& o, ASTNode *node)
     return o;
 }
 
-ostream& operator<<(ostream& o, ASTNode& node)
+std::ostream& operator<<(std::ostream& o, ASTNode& node)
 {
     node.print(o);
     return o;

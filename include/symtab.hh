@@ -1,7 +1,7 @@
 #ifndef __KOMP_SYMTAB__
 #define __KOMP_SYMTAB__
 
-#include "string.hh"
+#include <string.hh>
 
 class StatementList;
 class QuadsList;
@@ -41,7 +41,7 @@ public:
 class SymbolTable
 {
 protected:
-    virtual ostream& print(ostream&);
+    virtual std::ostream& print(std::ostream&);
 
 public:
     SymbolTableElement     **table;
@@ -53,8 +53,8 @@ public:
     void AddSymbol(SymbolInformation *);
     SymbolInformation *LookupSymbol(const string&);
 
-    friend ostream& operator<<(ostream&, SymbolTable &);
-    friend ostream& operator<<(ostream&, SymbolTable *);
+    friend std::ostream& operator<<(std::ostream&, SymbolTable &);
+    friend std::ostream& operator<<(std::ostream&, SymbolTable *);
 };
 
 
@@ -83,16 +83,16 @@ typedef enum
 class SymbolInformation
 {
 protected:
-    virtual ostream& print(ostream&);
+    virtual std::ostream& print(std::ostream&);
     friend class SymbolTable;
-    friend ostream& LongSymbols(ostream&);
-    friend ostream& SummarySymbols(ostream&);
-    friend ostream& ShortSymbols(ostream&);
+    friend std::ostream& LongSymbols(std::ostream&);
+    friend std::ostream& SummarySymbols(std::ostream&);
+    friend std::ostream& ShortSymbols(std::ostream&);
 
     typedef enum { kFullFormat, kSummaryFormat, kShortFormat } tFormatType;
-    
+
     static tFormatType outputFormat;
-    
+
 public:
     SymbolInformationType       tag;
     string                      id;
@@ -107,8 +107,8 @@ public:
     virtual VariableInformation *SymbolAsVariable(void) { return NULL; };
     virtual TypeInformation     *SymbolAsType(void)     { return NULL; };
 
-    friend ostream& operator<<(ostream&, SymbolInformation&);
-    friend ostream& operator<<(ostream&, SymbolInformation*);
+    friend std::ostream& operator<<(std::ostream&, SymbolInformation&);
+    friend std::ostream& operator<<(std::ostream&, SymbolInformation*);
 };
 
 
@@ -122,7 +122,7 @@ public:
 class FunctionInformation : public SymbolInformation
 {
 protected:
-    virtual ostream& print(ostream&);
+    virtual std::ostream& print(std::ostream&);
     friend class SymbolTable;
 
     long temporaryCount;
@@ -187,7 +187,7 @@ public:
 class VariableInformation : public SymbolInformation
 {
 protected:
-    virtual ostream& print(ostream&);
+    virtual std::ostream& print(std::ostream&);
 
 public:
     TypeInformation             *type;
@@ -206,7 +206,7 @@ public:
 class TypeInformation : public SymbolInformation
 {
 protected:
-    virtual ostream& print(ostream&);
+    virtual std::ostream& print(std::ostream&);
     friend class SymbolTable;
     friend class FunctionInformation;
     friend class VariableInformation;
@@ -228,8 +228,8 @@ public:
  * I/O manipulators for better output
  */
 
-ostream& ShortSymbols(ostream& o);
-ostream& LongSymbols(ostream& o);
+std::ostream& ShortSymbols(std::ostream& o);
+std::ostream& LongSymbols(std::ostream& o);
 
 
 #endif

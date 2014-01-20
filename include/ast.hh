@@ -1,8 +1,8 @@
 #ifndef __KOMP_AST__
 #define __KOMP_AST__
 
-#include "symtab.hh"
-#include "codegen.hh"
+#include <symtab.hh>
+#include <codegen.hh>
 
 class ASTNode;                  // X
 class StatementList;            // X
@@ -52,32 +52,32 @@ protected:
     static int  indentLevel;
     static bool branches[10000];
 
-    void indent(ostream& o);
+    void indent(std::ostream& o);
     void indentMore(void);
     void indentLess(void);
-    void beginChild(ostream& o);
-    void endChild(ostream& o);
-    void lastChild(ostream& o);
-    virtual void print(ostream& o);
-    virtual void xprint(ostream& o, char* cls);
+    void beginChild(std::ostream& o);
+    void endChild(std::ostream& o);
+    void lastChild(std::ostream& o);
+    virtual void print(std::ostream& o);
+    virtual void xprint(std::ostream& o, char* cls);
 
 public:
     virtual VariableInformation *GenerateCode(QuadsList &q) = 0;
     virtual VariableInformation *GenerateCodeAndJump(QuadsList &q,
                                                      long label);
 
-    friend ostream& operator<<(ostream&, ASTNode&);
-    friend ostream& operator<<(ostream&, ASTNode*);
+    friend std::ostream& operator<<(std::ostream&, ASTNode&);
+    friend std::ostream& operator<<(std::ostream&, ASTNode*);
 };
 
-ostream& operator<<(ostream&, ASTNode&);
-ostream& operator<<(ostream&, ASTNode*);
+std::ostream& operator<<(std::ostream&, ASTNode&);
+std::ostream& operator<<(std::ostream&, ASTNode*);
 
 
 class StatementList :  public ASTNode
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     Statement       *statement;
     StatementList   *precedingStatements;
@@ -92,7 +92,7 @@ public:
 class Statement :  public ASTNode
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     virtual VariableInformation *GenerateCode(QuadsList &q) = 0;
 };
@@ -100,7 +100,7 @@ public:
 class ElseIfList  :  public ASTNode
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     ElseIfList      *preceding;
@@ -120,7 +120,7 @@ public:
 class IfStatement :  public Statement
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Condition       *condition;
@@ -143,7 +143,7 @@ public:
 class Assignment :  public Statement
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     LeftValue       *target;
@@ -159,7 +159,7 @@ public:
 class CallStatement :  public Statement
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     FunctionCall        *call;
@@ -173,7 +173,7 @@ public:
 class ReturnStatement :  public Statement
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Expression          *value;
@@ -189,12 +189,12 @@ public:
 class WhileStatement :  public Statement
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Condition           *condition;
     StatementList       *body;
-    
+
     WhileStatement(Condition *c, StatementList *b) :
         condition(c),
         body(b) {};
@@ -206,7 +206,7 @@ public:
 class Expression :  public ASTNode
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     TypeInformation         *valueType;
@@ -220,7 +220,7 @@ public:
 class ExpressionList :  public ASTNode
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     ExpressionList          *precedingExpressions;
@@ -239,7 +239,7 @@ public:
 class FunctionCall :  public Expression
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     FunctionInformation     *function;
@@ -257,7 +257,7 @@ public:
 class IntegerToReal :  public Expression
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Expression              *value;
@@ -272,7 +272,7 @@ public:
 class TruncateReal :  public Expression
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Expression              *value;
@@ -287,7 +287,7 @@ public:
 class IntegerConstant :  public Expression
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     long int                 value;
@@ -302,7 +302,7 @@ public:
 class RealConstant :  public Expression
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     double                  value;
@@ -317,8 +317,8 @@ public:
 class BinaryOperation :  public Expression
 {
 protected:
-    virtual void print(ostream& o);
-    virtual void xprint(ostream& o, char *);
+    virtual void print(std::ostream& o);
+    virtual void xprint(std::ostream& o, char *);
 
 public:
     Expression          *left, *right;
@@ -334,7 +334,7 @@ public:
 class Plus :  public BinaryOperation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Plus(Expression *l, Expression *r) :
@@ -347,7 +347,7 @@ public:
 class Minus :  public BinaryOperation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Minus(Expression *l, Expression *r) :
@@ -360,7 +360,7 @@ public:
 class Times :  public BinaryOperation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Times(Expression *l, Expression *r) :
@@ -373,7 +373,7 @@ public:
 class Divide :  public BinaryOperation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Divide(Expression *l, Expression *r) :
@@ -386,7 +386,7 @@ public:
 class Power :  public BinaryOperation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Power(Expression *l, Expression *r) :
@@ -399,7 +399,7 @@ public:
 class UnaryMinus :  public Expression
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     Expression          *right;
@@ -416,7 +416,7 @@ public:
 class LeftValue :  public Expression
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     LeftValue(TypeInformation *t) :
@@ -430,7 +430,7 @@ public:
 class ArrayReference :  public LeftValue
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     VariableInformation     *id;
@@ -451,7 +451,7 @@ public:
 class Identifier :  public LeftValue
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     VariableInformation     *id;
@@ -470,7 +470,7 @@ public:
 class Condition :  public ASTNode
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 
 public:
     virtual VariableInformation *GenerateCode(QuadsList &q) = 0;
@@ -479,8 +479,8 @@ public:
 class BinaryRelation :  public Condition
 {
 protected:
-    virtual void print(ostream& o);
-    virtual void xprint(ostream& o, char *cls);
+    virtual void print(std::ostream& o);
+    virtual void xprint(std::ostream& o, char *cls);
 
 public:
     Expression      *left;
@@ -495,7 +495,7 @@ public:
 class LessThan :  public BinaryRelation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     LessThan(Expression *l, Expression *r) :
         BinaryRelation(l, r) {};
@@ -506,7 +506,7 @@ public:
 class GreaterThan :  public BinaryRelation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     GreaterThan(Expression *l, Expression *r) :
         BinaryRelation(l, r) {};
@@ -517,7 +517,7 @@ public:
 class GreaterThanOrEqual :  public BinaryRelation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     GreaterThanOrEqual(Expression *l, Expression *r) :
         BinaryRelation(l, r) {};
@@ -528,7 +528,7 @@ public:
 class LessThanOrEqual :  public BinaryRelation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     LessThanOrEqual(Expression *l, Expression *r) :
         BinaryRelation(l, r) {};
@@ -539,7 +539,7 @@ public:
 class Equal :  public BinaryRelation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     Equal(Expression *l, Expression *r) :
         BinaryRelation(l, r) {};
@@ -550,7 +550,7 @@ public:
 class NotEqual :  public BinaryRelation
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     NotEqual(Expression *l, Expression *r) :
         BinaryRelation(l, r) {};
@@ -562,9 +562,9 @@ public:
 class BinaryCondition : public Condition
 {
 protected:
-    virtual void print(ostream& o);
-    virtual void xprint(ostream&o, char *cls);
-    
+    virtual void print(std::ostream& o);
+    virtual void xprint(std::ostream&o, char *cls);
+
 public:
     Condition *left, *right;
 
@@ -578,7 +578,7 @@ public:
 class And : public BinaryCondition
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     And(Condition *l, Condition *r) :
         BinaryCondition(l, r) {};
@@ -589,7 +589,7 @@ public:
 class Or : public BinaryCondition
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     Or(Condition *l, Condition *r) :
         BinaryCondition(l, r) {};
@@ -600,7 +600,7 @@ public:
 class Not : public Condition
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     Condition *right;
 
@@ -613,7 +613,7 @@ public:
 class BooleanConstant : public Condition
 {
 protected:
-    virtual void print(ostream& o);
+    virtual void print(std::ostream& o);
 public:
     bool         value;
 

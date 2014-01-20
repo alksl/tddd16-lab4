@@ -1,9 +1,8 @@
 #include <stdlib.h>
-#include <malloc.h>
 #include <string.h>
 #include <ctype.h>
 #include <strstream>
-#include "string.hh"
+#include <string.hh>
 
 using std::ostrstream;
 
@@ -226,7 +225,7 @@ string& operator+(const string& s1, const int i )
     string      *res;
     char         buf[1024];
     ostrstream   str(buf, 1024);
-    
+
     str << i << '\0';
     res = new string;
     res->ensure_size(s1.position + strlen(buf) + 1);
@@ -313,7 +312,7 @@ const char string::operator[](const int ix) const
         return text[ix];
 }
 
-ostream& operator<<(ostream& o, const string& s)
+std::ostream& operator<<(std::ostream& o, const string& s)
 {
     char *tmp;
 
@@ -324,7 +323,7 @@ ostream& operator<<(ostream& o, const string& s)
     return o << tmp;
 }
 
-ostream& operator<<(ostream& o, const string* s)
+std::ostream& operator<<(std::ostream& o, const string* s)
 {
     char *tmp;
 

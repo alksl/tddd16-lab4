@@ -23,7 +23,7 @@ SymbolInformation::tFormatType SymbolInformation::outputFormat =
  * FunctionInformation methods
  */
 
-ostream& SymbolInformation::print(ostream& o)
+std::ostream& SymbolInformation::print(std::ostream& o)
 {
     switch (outputFormat)
     {
@@ -46,8 +46,9 @@ ostream& SymbolInformation::print(ostream& o)
 
     return o;
 }
+std::ostream& SummarySymbols(std::ostream&);
 
-ostream& TypeInformation::print(ostream& o)
+std::ostream& TypeInformation::print(std::ostream& o)
 {
     switch (outputFormat)
     {
@@ -75,10 +76,10 @@ ostream& TypeInformation::print(ostream& o)
         {
             o << id;
         }
-        
+
         o << " [" << size << "]";
         break;
-        
+
     case kShortFormat:
         if (elementType != NULL)
         {
@@ -91,7 +92,7 @@ ostream& TypeInformation::print(ostream& o)
             o << id;
         }
         break;
-        
+
 
     default:
         o << "Bad output format\n";
@@ -100,7 +101,7 @@ ostream& TypeInformation::print(ostream& o)
     return o;
 }
 
-ostream& VariableInformation::print(ostream& o)
+std::ostream& VariableInformation::print(std::ostream& o)
 {
     switch (outputFormat)
     {
@@ -138,7 +139,7 @@ ostream& VariableInformation::print(ostream& o)
     return o;
 }
 
-ostream& FunctionInformation::print(ostream& o)
+std::ostream& FunctionInformation::print(std::ostream& o)
 {
     VariableInformation *tmp;
 
@@ -187,7 +188,7 @@ ostream& FunctionInformation::print(ostream& o)
         {
             o << "  Locals: none\n";
         }
-        
+
         o << "  Body:  " << (void*)body << '\n';
         if (body) o << body;
         o << '\n';
@@ -195,7 +196,7 @@ ostream& FunctionInformation::print(ostream& o)
         o << "  Quads: " << (void*)quads << '\n';
         if (quads) o << quads;
         o << '\n';
-        
+
         o << symbolTable;
         break;
 
@@ -219,7 +220,7 @@ ostream& FunctionInformation::print(ostream& o)
     case kShortFormat:
         o << id;
         break;
-        
+
     default:
         o << "Bad output format.\n";
         abort();
@@ -339,8 +340,8 @@ TypeInformation *FunctionInformation::AddArrayType(TypeInformation *elemType,
 
             if (info == NULL)
             {
-                cerr << "Bug: Name collision creating array (can't happen.)\n"
-                     << flush;
+                std::cerr << "Bug: Name collision creating array (can't happen.)\n"
+                     << std::flush;
                 abort();
             }
         }
@@ -356,14 +357,14 @@ FunctionInformation *FunctionInformation::AddFunction(const string& name,
     xinfo = LookupIdentifier(name);
     if (xinfo != NULL && xinfo->tag == kTypeInformation)
     {
-        cerr << "Bug: you tried to create a function that's also a type\n";
+        std::cerr << "Bug: you tried to create a function that's also a type\n";
 	abort();
     }
 
     xinfo = symbolTable.LookupSymbol(name);
     if (xinfo != NULL)
     {
-        cerr << "Bug: you tried to create a function with a name "
+        std::cerr << "Bug: you tried to create a function with a name "
 	     << "that's already in use\n";
     }
 
@@ -385,7 +386,7 @@ VariableInformation *FunctionInformation::TemporaryVariable(TypeInformation *typ
 
     return info;
 }
-                                                      
+
 
 char FunctionInformation::OkToAddSymbol(const string& name)
 {
@@ -483,7 +484,7 @@ SymbolInformation *SymbolTable::LookupSymbol(const string& id)
     return NULL;
 }
 
-ostream& SymbolTable::print(ostream& o)
+std::ostream& SymbolTable::print(std::ostream& o)
 {
     int                      i;
     SymbolTableElement      *elem;
@@ -516,22 +517,22 @@ ostream& SymbolTable::print(ostream& o)
 }
 
 
-ostream& operator<<(ostream& o, SymbolTable& t)
+std::ostream& operator<<(std::ostream& o, SymbolTable& t)
 {
     return t.print(o);
 }
 
-ostream& operator<<(ostream& o, SymbolTable *t)
+std::ostream& operator<<(std::ostream& o, SymbolTable *t)
 {
     return t->print(o);
 }
 
-ostream& operator<<(ostream& o, SymbolInformation& i)
+std::ostream& operator<<(std::ostream& o, SymbolInformation& i)
 {
     return i.print(o);
 }
 
-ostream& operator<<(ostream& o, SymbolInformation *i)
+std::ostream& operator<<(std::ostream& o, SymbolInformation *i)
 {
     if (i == NULL)
         return o << "<SymbolInformation @ 0x0>";
@@ -539,19 +540,19 @@ ostream& operator<<(ostream& o, SymbolInformation *i)
         return i->print(o);
 }
 
-ostream& ShortSymbols(ostream& o)
+std::ostream& ShortSymbols(std::ostream& o)
 {
     SymbolInformation::outputFormat = SymbolInformation::kShortFormat;
     return o;
 }
 
-ostream& LongSymbols(ostream& o)
+std::ostream& LongSymbols(std::ostream& o)
 {
     SymbolInformation::outputFormat = SymbolInformation::kFullFormat;
     return o;
 }
 
-ostream& SummarySymbols(ostream& o)
+std::ostream& SummarySymbols(std::ostream& o)
 {
     SymbolInformation::outputFormat = SymbolInformation::kSummaryFormat;
     return o;

@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <iostream.h>
-#include "ast.hh"
-#include "parser.hh"
-#include "symtab.hh"
+#include <unistd.h>
+#include <iostream>
+#include <ast.hh>
+#include <parser.hh>
+#include <symtab.hh>
 
 extern int yyparse(void);
 extern int yydebug;
@@ -14,7 +15,7 @@ static char *optionString = "dh";
 
 void Usage(char *program)
 {
-    cerr << "Usage:\n"
+    std::cerr << "Usage:\n"
          << program << " [-d] [filename]\n"
          << program << " -h\n"
          << "\n"
@@ -29,7 +30,7 @@ int main(int argc, char **argv)
 {
     int          option;
     extern FILE *yyin;
-    
+
     //
     // Set up the symbol table
     //
@@ -49,7 +50,7 @@ int main(int argc, char **argv)
     kFPrintFunction->AddParameter("x", kRealType);
     kIReadFunction->SetReturnType(kIntegerType);
     kFReadFunction->SetReturnType(kRealType);
-    
+
     currentFunction->AddSymbol(kIntegerType);
     currentFunction->AddSymbol(kRealType);
     currentFunction->AddSymbol(kIPrintFunction);
@@ -60,7 +61,6 @@ int main(int argc, char **argv)
     //
     // Check command-line arguments
     //
-
     opterr = 0;
     optopt = '?';
     while ((option = getopt(argc, argv, optionString)) != EOF)
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
         }
         optind += 1;
     }
-    
+
     if (optind < argc)
         Usage(argv[0]);
 
@@ -101,4 +101,4 @@ int main(int argc, char **argv)
 
     return 0;
 }
-    
+

@@ -1,13 +1,13 @@
 %{
 #include <stdlib.h>
-#include <iostream.h>
-#include "string.hh"
-#include "ast.hh"
-#include "symtab.hh"
+#include <iostream>
+#include <string.hh>
+#include <ast.hh>
+#include <symtab.hh>
 
 extern char                    *yytext;
 extern int                      yylineno, errorCount, warningCount;
-extern FunctionInformation     *currentFunction; 
+extern FunctionInformation     *currentFunction;
 
 extern int yylex(void);
 extern void yyerror(char *);
@@ -17,8 +17,8 @@ extern char CheckFunctionParameters(FunctionInformation *,
                                     VariableInformation *,
                                     ExpressionList      *);
 char CheckReturnType(Expression **, TypeInformation *);
-extern ostream& error(void);
-extern ostream& warning(void);
+extern std::ostream& error(void);
+extern std::ostream& warning(void);
 
 #define YYDEBUG 1
 %}
@@ -45,7 +45,7 @@ extern ostream& warning(void);
     FunctionCall            *call;
     LeftValue               *lvalue;
     ElseIfList              *elseIfList;
-    
+
     VariableInformation     *variable;
     TypeInformation         *type;
     FunctionInformation     *function;
@@ -118,7 +118,7 @@ program     :   variables functions block ';'
                 {
                     currentFunction->SetBody($3);
                     /* currentFunction->GenerateCode(); */
-                    cout << currentFunction;
+                    std::cout << currentFunction;
                 }
             }
             ;
@@ -148,7 +148,7 @@ declaration :   id ':' type ';'
                 }
                 else
                 {
-                    error() << *($1) << " is already declared\n" << flush;
+                    error() << *($1) << " is already declared\n" << std::flush;
                 }
             }
             |   error ';'
@@ -185,7 +185,7 @@ functions   :   functions function
 
 function :
 	{
-	  cerr << "Function here" << endl;
+	  std::cerr << "Function here" << std::endl;
 	}
 	;
 
@@ -215,7 +215,7 @@ parameter   :   id ':' type
                 }
                 else
                 {
-                    error() << *($1) << " already defined\n" << flush;
+                    error() << *($1) << " already defined\n" << std::flush;
                     currentFunction->AddParameter(*($1), $3);
                 }
             }
@@ -243,16 +243,16 @@ type        :   id
                 info = currentFunction->LookupIdentifier(*($1));
                 if (info == NULL)
                 {
-                    error() << "undefined type " << *($1) << "\n" << flush;
+                    error() << "undefined type " << *($1) << "\n" << std::flush;
                     $$ = NULL;
                 }
                 else
                 {
                     typeInfo = info->SymbolAsType();
-                
+
                     if (typeInfo == NULL)
                     {
-                        error() << *($1) << " is not a type" << "\n" <<flush;
+                        error() << *($1) << " is not a type" << "\n" <<std::flush;
                         $$ = NULL;
                     }
                     else
@@ -266,12 +266,12 @@ type        :   id
                 if ($4 == NULL)
                 {
                     error() << "can't create arrays of invalid tpyes\n"
-                            << flush;
+                            << std::flush;
                     $$ = NULL;
                 }
                 else if ($4->elementType != NULL)
                 {
-                    error() << "can't do arrays of arrays\n" << flush;
+                    error() << "can't do arrays of arrays\n" << std::flush;
                     $$ = NULL;
                 }
                 else
@@ -365,7 +365,7 @@ assignstmt  :   lvalue ASSIGN expression
                 else if (!CheckAssignmentTypes(&left, &right))
                 {
                     error() << "Incompatible types in assignment.\n"
-                            << flush;
+                            << std::flush;
                     $$ = NULL;
                 }
                 else
@@ -403,7 +403,7 @@ returnstmt  :   RETURN expression
                         error() << "  attempt to return "
                                 << ShortSymbols << expr->valueType << '\n';
                         error() << " in function declared to return "
-                                << ShortSymbols 
+                                << ShortSymbols
                                 << currentFunction->GetReturnType()
                                 << LongSymbols << '\n';
                         $$ = NULL;
@@ -453,21 +453,21 @@ variable    :   id
                         << "undeclared variable: "
                         << *($1)
                         << "\n"
-                        << flush;
-                          
+                        << std::flush;
+
                     $$ = NULL;
                 }
                 else
                 {
                     varInfo = info->SymbolAsVariable();
-                    
+
                     if (varInfo == NULL)
                     {
                         error()
                             << "identifier "
                             << *($1)
                             << " is not a variable\n"
-                            << flush;
+                            << std::flush;
                         $$ = NULL;
                     }
                     else
@@ -486,7 +486,7 @@ funcname    :   id
                 info = currentFunction->LookupIdentifier(*($1));
                 if (info == NULL)
                 {
-                    error() << *($1) << " is not defined\n" << flush;
+                    error() << *($1) << " is not defined\n" << std::flush;
                     $$ = NULL;
                 }
                 else
@@ -495,7 +495,7 @@ funcname    :   id
 
                     if (funcInfo == NULL)
                     {
-                        error() << *($1) << " is not a function\n" << flush;
+                        error() << *($1) << " is not a function\n" << std::flush;
                         $$ = NULL;
                     }
                     else
@@ -577,12 +577,12 @@ real        :   REAL
 
 expression :
 	{
-	  cerr << "Expression here" << endl;
+	  std::cerr << "Expression here" << std::endl;
 	}
 	;
 
 /* --- End your code --- */
-  
+
 
 expressions : expressionz
             {
@@ -621,7 +621,7 @@ expressionz : expressionz ',' expression
 
 condition :
 	{
-	  cerr << "Condition here" << endl;
+	  std::cerr << "Condition here" << std::endl;
 	}
 	;
 
@@ -632,7 +632,7 @@ condition :
 
 int errorCount = 0;
 int warningCount = 0;
-            
+
 
 /* --- Your code here ---
  *
@@ -642,14 +642,14 @@ int warningCount = 0;
 /* It is reasonable to believe that you will need a function
  * that checks that two expressions are of compatible types,
  * and if possible makes a type conversion.
- * For your convenience a skeleton for such a function is 
+ * For your convenience a skeleton for such a function is
  * provided below. It will be very similar to CheckAssignmentTypes.
  */
 
 /*
  * CheckCompatibleTypes checks that the expressions indirectly pointed
  * to by left and right are compatible. If type conversion is
- * necessary, the pointers left and right point to will be modified to 
+ * necessary, the pointers left and right point to will be modified to
  * point to the node representing type conversion. That's why you have
  * to pass a pointer to pointer to Expression in these arguments.
  */
@@ -702,7 +702,7 @@ char CheckAssignmentTypes(LeftValue **left, Expression **right)
 
 /*
  * CheckFunctionParameters is used to check parameters passed to a
- * function. func is the function we're passing parameters to, formals 
+ * function. func is the function we're passing parameters to, formals
  * is a pointer to the last formal parameter we're checking against
  * and params is a pointer to the ExpressionList we're checking. If
  * type conversion is necessary, the Expressions pointed to by the
@@ -722,13 +722,13 @@ char CheckFunctionParameters(FunctionInformation *func,
     else if (formals == NULL && params != NULL)
     {
         error() << "too many arguments in call to " << func->id << '\n'
-                << flush;
+                << std::flush;
         return 0;
     }
     else if (formals != NULL && params == NULL)
     {
         error() << "too few arguments in call to " << func->id << '\n'
-                << flush;
+                << std::flush;
         return 0;
     }
     else
@@ -757,19 +757,19 @@ char CheckFunctionParameters(FunctionInformation *func,
                 error() << "incompatible types in call to "
                         << func->id
                         << '\n'
-                        << flush;
+                        << std::flush;
                 error() << "  parameter "
                         << formals->id
                         << " was declared "
                         << ShortSymbols
                         << formals->type
                         << '\n'
-                        << flush;
+                        << std::flush;
                 error() << "  argument was of type "
                         << params->expression->valueType
                         << '\n'
-                        << LongSymbols << flush;
-                return 0;                
+                        << LongSymbols << std::flush;
+                return 0;
             }
         }
     }
@@ -802,17 +802,17 @@ char CheckReturnType(Expression **expr, TypeInformation *info)
 
 void yyerror(char *message)
 {
-    error() << message << '\n' << flush;
+    error() << message << '\n' << std::flush;
 }
 
-ostream& error(void)
+std::ostream& error(void)
 {
     errorCount += 1;
-    return cerr << yylineno << " Error: ";
+    return std::cerr << yylineno << " Error: ";
 }
 
-ostream& warning(void)
+std::ostream& warning(void)
 {
     warningCount += 1;
-    return cerr << yylineno << " Warning: ";
+    return std::cerr << yylineno << " Warning: ";
 }
