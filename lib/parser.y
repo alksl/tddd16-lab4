@@ -183,20 +183,21 @@ functions   :   functions function
  * them. Just calling GeneratCode in the function should do the trick.
  */
 
-function : FUNCTION id parameters ':' type DECLARE declarations block ';'
-	{
-    if(currentFunction->OkToAddSymbol(*($2)))
-    {
-      FunctionInformation* newFunction = new FunctionInformation(*($2));
-      newFunction->SetParent(currentFunction);
-      newFunction->SetReturnType($5);
+function : FUNCTION id
+  {
+    FunctionInformation* newFunction = new FunctionInformation(*($2));
 
-      currentFunction->AddFunction(*($2), newFunction);
-    }
-    else
-    {
-      error() << "function " << *($2) << " already defined" << std::endl;
-    }
+    newFunction->SetParent(currentFunction);
+    currentFunction->AddFunction(*($2), newFunction);
+    currentFunction = newFunction;
+  }
+  parameters ':' type DECLARE declarations block ';'
+	{
+    currentFunction->SetReturnType($6);
+    currentFunction->SetBody($9);
+    std::cout << "hello -> " << std::hex << (void*)$9 << std::endl;
+    std::cout << currentFunction << std::endl;
+    currentFunction = currentFunction->GetParent();
 	}
 	;
 
@@ -587,11 +588,8 @@ real        :   REAL
  */
 
 expression : id
-           | INTEGER
-	{
-	  std::cerr << "Expression here" << std::endl;
-	}
-	;
+           | integer { $$ = new IntegerConstant($1); }
+	         ;
 
 /* --- End your code --- */
 

@@ -2,7 +2,7 @@ function empty ( i : integer ) : integer
 declare
   tmp : integer;
 begin
-  return i;
+  return 0;
 end;
 
 begin
