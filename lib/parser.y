@@ -588,6 +588,7 @@ real        :   REAL
 
 expression : id
            | integer { $$ = new IntegerConstant($1); }
+           | call
 	         ;
 
 /* --- End your code --- */

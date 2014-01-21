@@ -35,7 +35,12 @@ add_test(
   NAME empty_function
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/empty_function)
 
+add_test(
+  NAME recursive_function
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/recursive_function)
+
 set_tests_properties(
   empty_function
+  recursive_function
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 

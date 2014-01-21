@@ -1,0 +1,11 @@
+function recusive ( i : integer ) : integer
+declare
+  tmp : integer;
+begin
+  return recusive(0);
+end;
+
+begin
+  recusive(0);
+end;
+
