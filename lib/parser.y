@@ -195,7 +195,6 @@ function : FUNCTION id
 	{
     currentFunction->SetReturnType($6);
     currentFunction->SetBody($9);
-    std::cout << "hello -> " << std::hex << (void*)$9 << std::endl;
     std::cout << currentFunction << std::endl;
     currentFunction = currentFunction->GetParent();
 	}
