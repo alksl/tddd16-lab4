@@ -151,6 +151,7 @@ declaration :   id ':' type ';'
                     error() << *($1) << " is already declared\n" << std::flush;
                 }
             }
+            | functions
             |   error ';'
             {
                 yyerrok;

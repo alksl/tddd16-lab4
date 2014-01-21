@@ -39,8 +39,12 @@ add_test(
   NAME recursive_function
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/recursive_function)
 
+add_test(
+  NAME nested_function
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/nested_function)
 set_tests_properties(
   empty_function
   recursive_function
+  nested_function
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
