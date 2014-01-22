@@ -600,7 +600,8 @@ term       : expression '*' factor { $$ = new Times($1, $3);  }
 factor     : base '^' expression { $$ = new Power($1, $3); }
            | base
            ;
-base       : id
+base       : '-' expression { $$ = new UnaryMinus($2); }
+           | id
            | integer { $$ = new IntegerConstant($1) }
            | call
            ;

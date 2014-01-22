@@ -63,6 +63,10 @@ add_test(
   NAME exponentiation
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/exponentiation)
 
+add_test(
+  NAME negation
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/negation)
+
 set_tests_properties(
   empty_function
   recursive_function
@@ -72,5 +76,6 @@ set_tests_properties(
   multiplication
   division
   exponentiation
+  negation
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
