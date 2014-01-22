@@ -1,0 +1,6 @@
+declare
+  id : integer;
+
+begin
+  return id;
+end;

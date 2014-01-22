@@ -75,6 +75,10 @@ add_test(
   NAME real
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/real)
 
+add_test(
+  NAME identifier
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/identifier)
+
 set_tests_properties(
   empty_function
   recursive_function
@@ -87,5 +91,6 @@ set_tests_properties(
   negation
   integer
   real
+  identifier
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
