@@ -660,6 +660,8 @@ condition : expression GE expression { $$ = new GreaterThanOrEqual($1, $3);   }
           | expression EQ expression { $$ = new Equal($1, $3); }
           | expression NE expression { $$ = new NotEqual($1, $3); }
           | condition AND condition { $$ = new And($1, $3) }
+          | condition OR condition { $$ = new Or($1, $3); }
+          | NOT condition { $$ = new Not($2); }
           ;
 
 /* --- End your code --- */

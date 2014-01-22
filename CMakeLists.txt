@@ -111,6 +111,14 @@ add_test(
   NAME and
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/conditions/and)
 
+add_test(
+  NAME or
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/conditions/or)
+
+add_test(
+  NAME not
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/conditions/not)
+
 set_tests_properties(
   empty_function
   recursive_function
@@ -132,5 +140,7 @@ set_tests_properties(
   equal
   not_equal
   and
+  or
+  not
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
