@@ -1,0 +1,3 @@
+begin
+  return 12345;
+end;

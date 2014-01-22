@@ -603,6 +603,7 @@ factor     : base '^' expression { $$ = new Power($1, $3); }
 base       : '-' expression { $$ = new UnaryMinus($2); }
            | id
            | integer { $$ = new IntegerConstant($1) }
+           | real { $$ = new RealConstant($1) }
            | call
            ;
 

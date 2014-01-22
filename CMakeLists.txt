@@ -67,6 +67,14 @@ add_test(
   NAME negation
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/negation)
 
+add_test(
+  NAME integer
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/integer)
+
+add_test(
+  NAME real
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/real)
+
 set_tests_properties(
   empty_function
   recursive_function
@@ -77,5 +85,7 @@ set_tests_properties(
   division
   exponentiation
   negation
+  integer
+  real
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
