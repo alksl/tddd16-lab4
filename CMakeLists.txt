@@ -103,6 +103,10 @@ add_test(
   NAME equal
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/conditions/equal)
 
+add_test(
+  NAME not_equal
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/conditions/not_equal)
+
 set_tests_properties(
   empty_function
   recursive_function
@@ -122,5 +126,6 @@ set_tests_properties(
   greater
   less
   equal
+  not_equal
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
