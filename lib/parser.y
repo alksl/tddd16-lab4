@@ -668,6 +668,7 @@ operand   : negated AND condition { $$ = new And($1, $3); }
           ;
 
 negated   : NOT condition { $$ = new Not($2) }
+          | condition
           ;
 
 /* --- End your code --- */
