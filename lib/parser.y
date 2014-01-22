@@ -622,6 +622,7 @@ base       : '-' expression { $$ = new UnaryMinus($2); }
            | integer { $$ = new IntegerConstant($1) }
            | real { $$ = new RealConstant($1) }
            | call
+           | aref
            ;
 
 /* --- End your code --- */

@@ -1,0 +1,6 @@
+declare
+  arr : array 10 of integer;
+
+begin
+  return arr[2];
+end;

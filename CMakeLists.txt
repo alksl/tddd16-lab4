@@ -84,6 +84,10 @@ add_test(
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/identifier)
 
 add_test(
+  NAME array_ref
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/array_ref)
+
+add_test(
   NAME complex_expression
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/complex_expression)
 
@@ -141,6 +145,7 @@ set_tests_properties(
   integer
   real
   identifier
+  array_ref
   complex_expression
   greater_or_equal
   less_or_equal
