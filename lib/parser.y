@@ -56,7 +56,7 @@ extern std::ostream& warning(void);
     void                    *null;
 }
 
-%type <expression>      expression
+%type <expression>      expression term
 %type <expressionList>  expressions expressionz
 %type <statement>       ifstmt whilestmt returnstmt callstmt assignstmt
 %type <statement>       statement
@@ -587,10 +587,15 @@ real        :   REAL
  * trees for expressions with compatible types!
  */
 
-expression : id
-           | integer { $$ = new IntegerConstant($1); }
+expression : expression '+' term { $$ = new Plus($1, $3); }
+           | expression '-' term { $$ = new Minus($1, $3); }
+           | term
+           ;
+
+term       : id
+           | integer { $$ = new IntegerConstant($1) }
            | call
-	         ;
+           ;
 
 /* --- End your code --- */
 

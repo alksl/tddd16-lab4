@@ -42,9 +42,20 @@ add_test(
 add_test(
   NAME nested_function
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/nested_function)
+
+add_test(
+  NAME addition
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/addition)
+
+add_test(
+  NAME subtraction
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/subtraction)
+
 set_tests_properties(
   empty_function
   recursive_function
   nested_function
+  addition
+  subtraction
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
