@@ -1,0 +1,9 @@
+begin
+  if 2 < 1 then
+  begin
+    return 1;
+  end else
+  begin
+    return 0;
+  end if;
+end;

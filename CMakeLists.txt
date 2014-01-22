@@ -95,6 +95,10 @@ add_test(
   NAME greater
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/conditions/greater)
 
+add_test(
+  NAME less
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/conditions/less)
+
 set_tests_properties(
   empty_function
   recursive_function
@@ -112,5 +116,6 @@ set_tests_properties(
   greater_or_equal
   less_or_equal
   greater
+  less
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
