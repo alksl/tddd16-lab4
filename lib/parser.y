@@ -56,7 +56,7 @@ extern std::ostream& warning(void);
     void                    *null;
 }
 
-%type <expression>      expression term
+%type <expression>      expression term factor
 %type <expressionList>  expressions expressionz
 %type <statement>       ifstmt whilestmt returnstmt callstmt assignstmt
 %type <statement>       statement
@@ -587,12 +587,17 @@ real        :   REAL
  * trees for expressions with compatible types!
  */
 
-expression : expression '+' term { $$ = new Plus($1, $3); }
+expression : expression '+' term { $$ = new Plus($1, $3);  }
            | expression '-' term { $$ = new Minus($1, $3); }
            | term
            ;
 
-term       : id
+term       : expression '*' factor { $$ = new Times($1, $3);  }
+           | expression '/' factor { $$ = new Divide($1, $3); }
+           | factor
+           ;
+
+factor     : id
            | integer { $$ = new IntegerConstant($1) }
            | call
            ;

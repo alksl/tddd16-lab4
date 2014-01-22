@@ -51,11 +51,21 @@ add_test(
   NAME subtraction
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/subtraction)
 
+add_test(
+  NAME multiplication
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/multiplication)
+
+add_test(
+  NAME division
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/division)
+
 set_tests_properties(
   empty_function
   recursive_function
   nested_function
   addition
   subtraction
+  multiplication
+  division
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
