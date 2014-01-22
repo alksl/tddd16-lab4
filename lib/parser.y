@@ -61,7 +61,7 @@ extern std::ostream& warning(void);
 %type <statement>       ifstmt whilestmt returnstmt callstmt assignstmt
 %type <statement>       statement
 %type <statementList>   statements block elsepart
-%type <condition>       condition
+%type <condition>       condition operand negated
 %type <aref>            aref
 %type <call>            call
 %type <lvalue>          lvalue
@@ -659,9 +659,15 @@ condition : expression GE expression { $$ = new GreaterThanOrEqual($1, $3);   }
           | expression '<' expression { $$ = new LessThan($1, $3); }
           | expression EQ expression { $$ = new Equal($1, $3); }
           | expression NE expression { $$ = new NotEqual($1, $3); }
-          | condition AND condition { $$ = new And($1, $3) }
-          | condition OR condition { $$ = new Or($1, $3); }
-          | NOT condition { $$ = new Not($2); }
+          | operand OR condition { $$ = new Or($1, $3); }
+          | operand
+          ;
+
+operand   : negated AND condition { $$ = new And($1, $3); }
+          | negated
+          ;
+
+negated   : NOT condition { $$ = new Not($2) }
           ;
 
 /* --- End your code --- */

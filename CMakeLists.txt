@@ -119,6 +119,10 @@ add_test(
   NAME not
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/conditions/not)
 
+add_test(
+  NAME complex_condition
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/conditions/complex_condition)
+
 set_tests_properties(
   empty_function
   recursive_function
@@ -142,5 +146,6 @@ set_tests_properties(
   and
   or
   not
+  complex_condition
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
