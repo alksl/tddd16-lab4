@@ -1,0 +1,6 @@
+declare
+  i : integer;
+
+begin
+  return 1 + 2 - 3 * 4^i / 6;
+end;

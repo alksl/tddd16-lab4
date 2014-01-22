@@ -79,6 +79,10 @@ add_test(
   NAME identifier
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/identifier)
 
+add_test(
+  NAME complex_expression
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/complex_expression)
+
 set_tests_properties(
   empty_function
   recursive_function
@@ -92,5 +96,6 @@ set_tests_properties(
   integer
   real
   identifier
+  complex_expression
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 

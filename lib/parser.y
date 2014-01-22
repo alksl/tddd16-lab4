@@ -587,17 +587,17 @@ real        :   REAL
  * trees for expressions with compatible types!
  */
 
-expression : expression '+' term { $$ = new Plus($1, $3);  }
-           | expression '-' term { $$ = new Minus($1, $3); }
+expression : term '+' expression { $$ = new Plus($1, $3);  }
+           | term '-' expression { $$ = new Minus($1, $3); }
            | term
            ;
 
-term       : expression '*' factor { $$ = new Times($1, $3);  }
-           | expression '/' factor { $$ = new Divide($1, $3); }
+term       : factor '*' expression { $$ = new Times($1, $3);  }
+           | factor '/' expression { $$ = new Divide($1, $3); }
            | factor
            ;
 
-factor     : base '^' expression { $$ = new Power($1, $3); }
+factor     : expression '^' base { $$ = new Power($1, $3); }
            | base
            ;
 base       : '-' expression { $$ = new UnaryMinus($2); }
