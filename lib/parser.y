@@ -185,21 +185,30 @@ functions   :   functions function
  */
 
 function : FUNCTION id
-  {
-    FunctionInformation* newFunction = new FunctionInformation(*($2));
+        {
+          FunctionInformation* newFunction = new FunctionInformation(*($2));
 
-    newFunction->SetParent(currentFunction);
-    currentFunction->AddFunction(*($2), newFunction);
-    currentFunction = newFunction;
-  }
-  parameters ':' type DECLARE declarations block ';'
-	{
-    currentFunction->SetReturnType($6);
-    currentFunction->SetBody($9);
-    std::cout << currentFunction << std::endl;
-    currentFunction = currentFunction->GetParent();
-	}
-	;
+          newFunction->SetParent(currentFunction);
+          currentFunction->AddFunction(*($2), newFunction);
+          currentFunction = newFunction;
+        }
+        parameters ':' type function_body ';'
+        {
+          currentFunction->SetReturnType($6);
+          std::cout << currentFunction << std::endl;
+          currentFunction = currentFunction->GetParent();
+
+        }
+	      ;
+
+function_body : DECLARE declarations block
+              {
+                currentFunction->SetBody($3);
+              }
+              | block
+              {
+                currentFunction->SetBody($1);
+              }
 
 /* --- End your code --- */
 

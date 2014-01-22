@@ -44,6 +44,10 @@ add_test(
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/nested_function)
 
 add_test(
+  NAME function_without_declaration
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/function_without_declaration)
+
+add_test(
   NAME addition
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/addition)
 
@@ -127,6 +131,7 @@ set_tests_properties(
   empty_function
   recursive_function
   nested_function
+  function_without_declaration
   addition
   subtraction
   multiplication
