@@ -653,11 +653,8 @@ expressionz : expressionz ',' expression
  * elsewhere, so make sure you get it right.
  */
 
-condition :
-	{
-	  std::cerr << "Condition here" << std::endl;
-	}
-	;
+condition : expression GE expression { $$ = new GreaterThanOrEqual($1, $3);   }
+          ;
 
 /* --- End your code --- */
 

@@ -83,6 +83,10 @@ add_test(
   NAME complex_expression
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/expressions/complex_expression)
 
+add_test(
+  NAME greater_or_equal
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/conditions/greater_or_equal)
+
 set_tests_properties(
   empty_function
   recursive_function
@@ -97,5 +101,6 @@ set_tests_properties(
   real
   identifier
   complex_expression
+  greater_or_equal
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
