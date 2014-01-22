@@ -56,7 +56,7 @@ extern std::ostream& warning(void);
     void                    *null;
 }
 
-%type <expression>      expression term factor
+%type <expression>      expression term factor base
 %type <expressionList>  expressions expressionz
 %type <statement>       ifstmt whilestmt returnstmt callstmt assignstmt
 %type <statement>       statement
@@ -597,7 +597,10 @@ term       : expression '*' factor { $$ = new Times($1, $3);  }
            | factor
            ;
 
-factor     : id
+factor     : base '^' expression { $$ = new Power($1, $3); }
+           | base
+           ;
+base       : id
            | integer { $$ = new IntegerConstant($1) }
            | call
            ;
