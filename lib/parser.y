@@ -657,6 +657,7 @@ condition : expression GE expression { $$ = new GreaterThanOrEqual($1, $3);   }
           | expression LE expression { $$ = new LessThanOrEqual($1, $3);      }
           | expression '>' expression { $$ = new GreaterThan($1, $3); }
           | expression '<' expression { $$ = new LessThan($1, $3); }
+          | expression EQ expression { $$ = new Equal($1, $3); }
           ;
 
 /* --- End your code --- */
