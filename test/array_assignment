@@ -1,0 +1,6 @@
+declare
+  var : array 10 of integer;
+
+begin
+  var[4] := 42;
+end;

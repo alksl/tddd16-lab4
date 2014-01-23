@@ -70,9 +70,13 @@ VariableInformation *ElseIfList::GenerateCodeAndJump(QuadsList &q,
 void ArrayReference::GenerateAssignment(QuadsList& q,
                                         VariableInformation *val)
 {
-    /* --- Your code here --- */
-
-    /* --- End your code --- */
+  /* --- Your code here --- */
+  if(id->type->elementType == kIntegerType) {
+    q += new Quad(iassign, val, NULL, id);
+  } else if(id->type->elementType == kRealType) {
+    q += new Quad(rassign, val, NULL, id);
+  }
+  /* --- End your code --- */
 }
 
 /*
@@ -251,9 +255,27 @@ VariableInformation *BooleanConstant::GenerateCode(QuadsList& q)
 
 VariableInformation *ArrayReference::GenerateCode(QuadsList& q)
 {
-    /* --- Your code here --- */
+  /* --- Your code here --- */
+  VariableInformation* base =
+    currentFunction->TemporaryVariable(kIntegerType);
+  VariableInformation* address =
+    currentFunction->TemporaryVariable(kIntegerType);
+  VariableInformation* variable =
+    currentFunction->TemporaryVariable(id->type->elementType);
+  VariableInformation* offset = index->GenerateCode(q);
 
-    /* --- End your code --- */
+
+  q += new Quad(iaddr, id, NULL, base);
+  q += new Quad(iadd, base, offset, address);
+
+  if(variable->type == kIntegerType) {
+    q += new Quad(iload, address, NULL, variable);
+  } else if(variable->type == kRealType) {
+    q += new Quad(rload, address, NULL, variable);
+  }
+
+  return variable;
+  /* --- End your code --- */
 }
 
 /*

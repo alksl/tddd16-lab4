@@ -117,7 +117,7 @@ program     :   variables functions block ';'
                 if (errorCount == 0)
                 {
                     currentFunction->SetBody($3);
-                    /* currentFunction->GenerateCode(); */
+                    currentFunction->GenerateCode();
                     std::cout << currentFunction;
                 }
             }

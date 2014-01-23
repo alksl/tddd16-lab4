@@ -58,6 +58,10 @@ int main(int argc, char **argv)
     currentFunction->AddSymbol(kIReadFunction);
     currentFunction->AddSymbol(kFReadFunction);
 
+
+    // Add a return type for the main scope for consistancy
+    currentFunction->SetReturnType(kIntegerType);
+
     //
     // Check command-line arguments
     //
