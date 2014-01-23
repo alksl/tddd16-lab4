@@ -192,9 +192,12 @@ function : FUNCTION id
           currentFunction->AddFunction(*($2), newFunction);
           currentFunction = newFunction;
         }
-        parameters ':' type function_body ';'
+        parameters ':' type
         {
           currentFunction->SetReturnType($6);
+        }
+        function_body ';'
+        {
           std::cout << currentFunction << std::endl;
           currentFunction = currentFunction->GetParent();
 
@@ -596,24 +599,55 @@ real        :   REAL
  * trees for expressions with compatible types!
  */
 
-expression : term '+' expression { $$ = new Plus($1, $3);  }
-           | term '-' expression { $$ = new Minus($1, $3); }
+expression : term '+' expression
+           {  if(CheckCompatibleTypes(&($1), &($3))) {
+                $$ = new Plus($1, $3);
+              } else {
+                error() << "Plus: Incompatible types" << std::endl;
+              }
+           }
+           | term '-' expression
+           {  if(CheckCompatibleTypes(&($1), &($3))) {
+                $$ = new Minus($1, $3);
+              } else {
+                error() << "Minus: Incompatible types" << std::endl;
+              }
+           }
            | term
            ;
 
-term       : factor '*' expression { $$ = new Times($1, $3);  }
-           | factor '/' expression { $$ = new Divide($1, $3); }
+term       : factor '*' expression
+           {  if(CheckCompatibleTypes(&($1), &($3))) {
+                $$ = new Times($1, $3);
+              } else {
+                error() << "Times: Incompatible types" << std::endl;
+              }
+           }
+           | factor '/' expression
+           {  if(CheckCompatibleTypes(&($1), &($3))) {
+                $$ = new Divide($1, $3);
+              } else {
+                error() << "Divide: Incompatible types" << std::endl;
+              }
+           }
            | factor
            ;
 
-factor     : expression '^' base { $$ = new Power($1, $3); }
+factor     : expression '^' base
+           {  if(CheckCompatibleTypes(&($1), &($3))) {
+                $$ = new Power($1, $3);
+              } else {
+                error() << "Power: Incompatible types" << std::endl;
+              }
+           }
            | base
            ;
 base       : '-' expression { $$ = new UnaryMinus($2); }
            | id
            {
               SymbolInformation* symbol = currentFunction->LookupIdentifier(*($1));
-              if(symbol != NULL) {
+              VariableInformation* variable = symbol->SymbolAsVariable();
+              if(variable != NULL) {
                 $$ = new Identifier(symbol->SymbolAsVariable());
               } else {
                 error() << "Unable to find variable: " << *($1) << std::endl;
@@ -712,7 +746,19 @@ int warningCount = 0;
 
 char CheckCompatibleTypes(Expression **left, Expression **right)
 {
+  if(*left == NULL || *right == NULL) {
     return 0;
+  } else if((*left)->valueType == (*right)->valueType) {
+    return 1;
+  } else if((*left)->valueType == kRealType) {
+    *right = new IntegerToReal(*right);
+    return 1;
+  } else if((*right)->valueType == kRealType) {
+    *left = new IntegerToReal(*left);
+    return 1;
+  }
+
+  return 0;
 }
 
 /* --- End your code --- */
