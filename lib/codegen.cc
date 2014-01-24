@@ -34,6 +34,17 @@ VariableInformation *ASTNode::GenerateCodeAndJump(QuadsList& q,
     return info;
 }
 
+void GenerateConditionalStatements(QuadsList& q, Condition* condition, StatementList* statements, long endLabel) {
+  long endStatementsLabel = q.NextLabel();
+  VariableInformation* cond = condition->GenerateCode(q);
+
+  q += new Quad(jfalse, endStatementsLabel, cond, NULL);
+  statements->GenerateCode(q);
+  q += new Quad(jump, endLabel, NULL, NULL);
+  q += new Quad(clabel, endStatementsLabel, NULL, NULL);
+}
+
+
 
 /* ElseIfStatement::GenerateCodeAndJump
  *
@@ -46,17 +57,17 @@ VariableInformation *ASTNode::GenerateCodeAndJump(QuadsList& q,
  */
 
 VariableInformation *ElseIfList::GenerateCodeAndJump(QuadsList &q,
-                                                     long lbl)
+                                                     long endLabel)
 {
-    long                     next;
-    VariableInformation     *info;
+  /* --- Your code here --- */
+  if(preceding != NULL) {
+    preceding->GenerateCodeAndJump(q, endLabel);
+  }
 
-    /* --- Your code here --- */
+  GenerateConditionalStatements(q, condition, body, endLabel);
+  /* --- End your code --- */
 
-    /* --- End your code --- */
-
-    return NULL;
-
+  return NULL;
 }
 
 
@@ -137,27 +148,6 @@ VariableInformation *StatementList::GenerateCode(QuadsList &q)
     return statement->GenerateCode(q);
 }
 
-void GenerateConditionalStatements(QuadsList& q, Condition* condition, StatementList* statements, long endLabel) {
-  long endStatementsLabel = q.NextLabel();
-  VariableInformation* cond = condition->GenerateCode(q);
-
-  q += new Quad(jfalse, endStatementsLabel, cond, NULL);
-  statements->GenerateCode(q);
-  q += new Quad(jump, endLabel, NULL, NULL);
-  q += new Quad(clabel, endStatementsLabel, NULL, NULL);
-}
-
-
-
-void GenerateElseIfCode(QuadsList& q, long endLabel, ElseIfList* elseIf) {
-  if(elseIf == NULL) {
-    return;
-  }
-
-  GenerateElseIfCode(q, endLabel, elseIf->preceding);
-  GenerateConditionalStatements(q, elseIf->condition, elseIf->body, endLabel);
-}
-
 
 /*
  * IfStatement::GenerateCode
@@ -175,9 +165,15 @@ VariableInformation *IfStatement::GenerateCode(QuadsList& q)
   VariableInformation* cond = condition->GenerateCode(q);
 
   GenerateConditionalStatements(q, condition, thenStatements, endIfLabel);
-  GenerateElseIfCode(q, endIfLabel, elseIfList);
 
-  elseStatements->GenerateCode(q);
+  if(elseIfList != NULL) {
+    elseIfList->GenerateCodeAndJump(q, endIfLabel);
+  }
+
+  if(elseStatements != NULL) {
+    elseStatements->GenerateCode(q);
+  }
+
   q += new Quad(clabel, endIfLabel, NULL, NULL);
 
   /* --- End your code --- */
