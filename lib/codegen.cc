@@ -137,6 +137,27 @@ VariableInformation *StatementList::GenerateCode(QuadsList &q)
     return statement->GenerateCode(q);
 }
 
+void GenerateConditionalStatements(QuadsList& q, Condition* condition, StatementList* statements, long endLabel) {
+  long endStatementsLabel = q.NextLabel();
+  VariableInformation* cond = condition->GenerateCode(q);
+
+  q += new Quad(jfalse, endStatementsLabel, cond, NULL);
+  statements->GenerateCode(q);
+  q += new Quad(jump, endLabel, NULL, NULL);
+  q += new Quad(clabel, endStatementsLabel, NULL, NULL);
+}
+
+
+
+void GenerateElseIfCode(QuadsList& q, long endLabel, ElseIfList* elseIf) {
+  if(elseIf == NULL) {
+    return;
+  }
+
+  GenerateElseIfCode(q, endLabel, elseIf->preceding);
+  GenerateConditionalStatements(q, elseIf->condition, elseIf->body, endLabel);
+}
+
 
 /*
  * IfStatement::GenerateCode
@@ -149,12 +170,18 @@ VariableInformation *StatementList::GenerateCode(QuadsList &q)
 
 VariableInformation *IfStatement::GenerateCode(QuadsList& q)
 {
-    /* --- Your code here ---*/
+  /* --- Your code here ---*/
+  long endIfLabel = q.NextLabel();
+  VariableInformation* cond = condition->GenerateCode(q);
 
+  GenerateConditionalStatements(q, condition, thenStatements, endIfLabel);
+  GenerateElseIfCode(q, endIfLabel, elseIfList);
 
-    /* --- End your code --- */
+  elseStatements->GenerateCode(q);
+  q += new Quad(clabel, endIfLabel, NULL, NULL);
 
-    return NULL;
+  /* --- End your code --- */
+  return NULL;;
 }
 
 
@@ -169,14 +196,11 @@ VariableInformation *IfStatement::GenerateCode(QuadsList& q)
 
 VariableInformation *ElseIfList::GenerateCode(QuadsList& q)
 {
-    USEQ;
+  USEQ;
+  /* --- Your code here --- */
+  /* --- End your code --- */
 
-    /* --- Your code here --- */
-
-    /* --- End your code --- */
-
-    std::cerr << "Call to ElseIfList::GenerateCode. You probably didn't want to do this.\n"; //
-    abort();
+  return NULL;
 }
 
 
@@ -484,6 +508,7 @@ static VariableInformation *BinaryGenerateCode(QuadsList& q,
     /* --- Your code here --- */
 
     /* --- End your code --- */
+  return currentFunction->TemporaryVariable(kIntegerType);
 }
 
 /*

@@ -139,6 +139,10 @@ add_test(
   NAME array_assignment
   COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/array_assignment)
 
+add_test(
+  NAME else_if
+  COMMAND ${CMAKE_BINARY_DIR}/parser ${CMAKE_SOURCE_DIR}/test/else_if)
+
 set_tests_properties(
   empty_function
   recursive_function
@@ -167,5 +171,6 @@ set_tests_properties(
   not
   complex_condition
   array_assignment
+  else_if
   PROPERTIES FAIL_REGULAR_EXPRESSION "Error")
 
