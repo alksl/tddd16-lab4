@@ -162,8 +162,6 @@ VariableInformation *IfStatement::GenerateCode(QuadsList& q)
 {
   /* --- Your code here ---*/
   long endIfLabel = q.NextLabel();
-  VariableInformation* cond = condition->GenerateCode(q);
-
   GenerateConditionalStatements(q, condition, thenStatements, endIfLabel);
 
   if(elseIfList != NULL) {
@@ -499,12 +497,21 @@ static VariableInformation *BinaryGenerateCode(QuadsList& q,
                                                ASTNode *node,
                                                TypeInformation *type = NULL)
 {
-    VariableInformation *leftInfo, *rightInfo, *result;
+  VariableInformation *leftInfo, *rightInfo, *result = NULL;
+  /* --- Your code here --- */
+  leftInfo = left->GenerateCode(q);
+  rightInfo = right->GenerateCode(q);
 
-    /* --- Your code here --- */
+  if(leftInfo->type == kIntegerType && rightInfo->type == kIntegerType) {
+    result = currentFunction->TemporaryVariable((type == NULL) ? kIntegerType : type);
+    q += new Quad(intop, leftInfo, rightInfo, result);
+  } else if(leftInfo->type == kRealType && rightInfo->type == kRealType) {
+    result = currentFunction->TemporaryVariable((type == NULL) ? kRealType : type);
+    q += new Quad(realop, leftInfo, rightInfo, result);
+  }
+  /* --- End your code --- */
 
-    /* --- End your code --- */
-  return currentFunction->TemporaryVariable(kIntegerType);
+  return result;
 }
 
 /*
